@@ -8,6 +8,8 @@ setup(
     author_email="example@example.com",
     packages=["lib_ml_remla24_team02"],
     install_requires=[
-        
+        "scikit-learn",
+        "tensorflow",
+        "joblib"
     ]
 )
