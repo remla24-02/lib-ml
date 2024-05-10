@@ -5,7 +5,7 @@ import os, sys, logging
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.preprocessing.text import Tokenizer  # type: ignore
 from tensorflow.keras.preprocessing.sequence import pad_sequences  # type: ignore
-from joblib import dump
+from joblib import dump, load
 
 
 def load_data(data_dir):
@@ -87,6 +87,19 @@ def preprocess(data_dir, output_dir):
     dump(y_train, os.path.join(output_dir, 'preprocessed_y_train.joblib'))
     dump(y_val, os.path.join(output_dir, 'preprocessed_y_val.joblib'))
     dump(y_test, os.path.join(output_dir, 'preprocessed_y_test.joblib'))
+
+def preprocess_single(url, char_index_path):
+    """
+    Preprocess a single URL.
+    """
+    sequence_length = 200
+    char_index = load(char_index_path)
+
+    sequence = []
+    for char in url:
+        sequence.append(char_index.get(char, char_index.get('-n-', 1)))
+
+    return pad_sequences([sequence], maxlen=sequence_length)
 
 
 if __name__ == '__main__':
