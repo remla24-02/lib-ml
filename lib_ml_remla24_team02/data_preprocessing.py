@@ -66,7 +66,7 @@ def encode_data(raw_y):
     y_val = encoder.transform(raw_y_val)
     y_test = encoder.transform(raw_y_test)
 
-    return y_train, y_val, y_test
+    return y_train, y_val, y_test, encoder
 
 
 def preprocess(data_dir, output_dir):
@@ -75,7 +75,7 @@ def preprocess(data_dir, output_dir):
     """
     raw_x, raw_y = load_data(data_dir)
     x_train, x_val, x_test, char_index = tokenize_data(raw_x)
-    y_train, y_val, y_test = encode_data(raw_y)
+    y_train, y_val, y_test, encoder = encode_data(raw_y)
 
     os.makedirs(output_dir, exist_ok=True)
 
@@ -88,6 +88,7 @@ def preprocess(data_dir, output_dir):
     dump(y_train, os.path.join(output_dir, 'preprocessed_y_train.joblib'))
     dump(y_val, os.path.join(output_dir, 'preprocessed_y_val.joblib'))
     dump(y_test, os.path.join(output_dir, 'preprocessed_y_test.joblib'))
+    dump(encoder, os.path.join(output_dir, 'label_encoder.joblib'))
 
 
 def preprocess_single(url):
@@ -105,8 +106,16 @@ def preprocess_single(url):
         return pad_sequences([sequence], maxlen=sequence_length)
 
 
+def decode_label(labels):
+    """
+    Decode labels.
+    """
+    with pkg_resources.path('lib_ml_remla24_team02.data', 'label_encoder.joblib') as encoder_path:
+        encoder = load(encoder_path)
+        return encoder.inverse_transform(labels)
+
+
 if __name__ == '__main__':
-    print(preprocess_single("www.test.com"))
     if len(sys.argv) < 3:
         logging.error("Incorrect arguments. Usage: python data_preprocessing.py <data_dir> <output_dir>")
         sys.exit(1)
