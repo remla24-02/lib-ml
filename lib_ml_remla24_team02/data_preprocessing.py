@@ -2,6 +2,7 @@
 Preprocess the data to be trained by the learning algorithm.
 """
 import os, sys, logging
+import importlib.resources as pkg_resources
 from sklearn.preprocessing import LabelEncoder
 from tensorflow.keras.preprocessing.text import Tokenizer  # type: ignore
 from tensorflow.keras.preprocessing.sequence import pad_sequences  # type: ignore
@@ -88,21 +89,24 @@ def preprocess(data_dir, output_dir):
     dump(y_val, os.path.join(output_dir, 'preprocessed_y_val.joblib'))
     dump(y_test, os.path.join(output_dir, 'preprocessed_y_test.joblib'))
 
-def preprocess_single(url, char_index_path):
+
+def preprocess_single(url):
     """
     Preprocess a single URL.
     """
     sequence_length = 200
-    char_index = load(char_index_path)
+    with pkg_resources.path('lib_ml_remla24_team02.data', 'char_index.joblib') as model_path:
+        char_index = load(model_path)
 
-    sequence = []
-    for char in url:
-        sequence.append(char_index.get(char, char_index.get('-n-', 1)))
+        sequence = []
+        for char in url:
+            sequence.append(char_index.get(char, char_index.get('-n-', 1)))
 
-    return pad_sequences([sequence], maxlen=sequence_length)
+        return pad_sequences([sequence], maxlen=sequence_length)
 
 
 if __name__ == '__main__':
+    print(preprocess_single("www.test.com"))
     if len(sys.argv) < 3:
         logging.error("Incorrect arguments. Usage: python data_preprocessing.py <data_dir> <output_dir>")
         sys.exit(1)

@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "A package for pre-processing ML data for the REMLA course at the TU Delft."
 authors = ["REMLA 24 Team 02 <team02@remla24.com>"]
 readme = "README.md"
+include = ["lib_ml_remla24_team02/data/*.joblib"]
 
 [tool.poetry.dependencies]
 python = "^3.12"
