@@ -66,7 +66,7 @@ def encode_data(raw_y):
     y_val = encoder.transform(raw_y_val)
     y_test = encoder.transform(raw_y_test)
 
-    return y_train, y_val, y_test, encoder
+    return y_train, y_val, y_test
 
 
 def preprocess(data_dir, output_dir):
@@ -75,7 +75,7 @@ def preprocess(data_dir, output_dir):
     """
     raw_x, raw_y = load_data(data_dir)
     x_train, x_val, x_test, char_index = tokenize_data(raw_x)
-    y_train, y_val, y_test, encoder = encode_data(raw_y)
+    y_train, y_val, y_test = encode_data(raw_y)
 
     os.makedirs(output_dir, exist_ok=True)
 
@@ -88,7 +88,6 @@ def preprocess(data_dir, output_dir):
     dump(y_train, os.path.join(output_dir, 'preprocessed_y_train.joblib'))
     dump(y_val, os.path.join(output_dir, 'preprocessed_y_val.joblib'))
     dump(y_test, os.path.join(output_dir, 'preprocessed_y_test.joblib'))
-    dump(encoder, os.path.join(output_dir, 'label_encoder.joblib'))
 
 
 def preprocess_single(url):
