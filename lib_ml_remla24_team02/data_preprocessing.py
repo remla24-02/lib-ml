@@ -91,21 +91,6 @@ def preprocess(data_dir, output_dir):
     dump(encoder, os.path.join(output_dir, 'label_encoder.joblib'))
 
 
-def preprocess_single(url):
-    """
-    Preprocess a single URL.
-    """
-    sequence_length = 200
-    with pkg_resources.path('lib_ml_remla24_team02.data', 'char_index.joblib') as model_path:
-        char_index = load(model_path)
-
-        sequence = []
-        for char in url:
-            sequence.append(char_index.get(char, char_index.get('-n-', 1)))
-
-        return pad_sequences([sequence], maxlen=sequence_length)
-
-
 def decode_label(labels):
     """
     Decode labels.
