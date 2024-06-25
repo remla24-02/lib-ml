@@ -22,3 +22,14 @@ output_dir = 'path/to/save/processed/data' # Path for joblib output
 data_preprocessing.preprocess(data_dir, output_dir) # Pre-processes the whole dataset
 
 ```
+
+## Versioning
+
+For versioning, we used the GitHub Action provided by [anothrNick](https://github.com/anothrNick/github-tag-action).
+
+The patch version is automatically increased and a tag is created when a branch is merged to main via a pull request.
+
+For minor and major versions, you can push a Git tag like ```v.0.1.0``` and a workflow will be triggered, which will release the new version.
+Or, if the merge commit message includes #major, #minor, #patch, or #none, the respective version bump will be triggered automatically.
+
+Pre-release version such as ```v.0.1.0.dev1``` are also supported.
